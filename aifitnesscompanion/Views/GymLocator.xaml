@@ -1,0 +1,98 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+             x:Class="aifitnesscompanion.Views.GymLocator"
+             Title="Gym Locator"
+             AutomationProperties.Name="Gym Locator Page">
+
+  <ContentView>
+    <ContentView.GestureRecognizers>
+              <SwipeGestureRecognizer Direction="Left" Command="{Binding SwipeCommand}" CommandParameter="Left" AutomationProperties.Name="Swipe left to go to the AI Calorie Calculator page."/>
+        <SwipeGestureRecognizer Direction="Right" Command="{Binding SwipeCommand}" CommandParameter="Right"  AutomationProperties.Name="Swipe right to go to the AI Fitness Coach page."/>
+    </ContentView.GestureRecognizers>
+        <Grid Padding="30" RowSpacing="20" TranslationX="{Binding TranslationX}" Opacity="{Binding LayoutOpacity}">
+            <Grid.GestureRecognizers>
+              <SwipeGestureRecognizer Direction="Left" Command="{Binding SwipeCommand}" CommandParameter="Left" AutomationProperties.Name="Swipe left to go to the AI Calorie Calculator page."/>
+        <SwipeGestureRecognizer Direction="Right" Command="{Binding SwipeCommand}" CommandParameter="Right"  AutomationProperties.Name="Swipe right to go to the AI Fitness Coach page."/>
+            </Grid.GestureRecognizers>
+           
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Subtitle row -->
+                <RowDefinition Height="Auto"/>
+                <!-- Button row -->
+                <RowDefinition Height="Auto"/>
+                <!-- Map row -->
+                <RowDefinition Height="*"/>
+                <!-- ListView row -->
+            </Grid.RowDefinitions>
+
+            <!-- Subtitle Label -->
+            <Label Text="Click the button below to locate gyms near you!" 
+               Grid.Row="0" 
+               HorizontalOptions="Center" 
+               HorizontalTextAlignment="Center" 
+               FontFamily="DMSans" 
+               FontSize="22" 
+               Margin="0,0,0,10"
+               AutomationProperties.Name="Subtitle: Click the button below to locate gyms near you!"/>
+
+            <!-- Locate Gyms Button -->
+            <Button Text="{Binding ButtonText}" 
+                Style="{StaticResource MainActionButtons}" 
+                BackgroundColor="{Binding ButtonColor}" 
+                TextColor="{Binding ButtonTextColor}"
+                x:Name="locateGymsButton"
+                WidthRequest="{OnIdiom Phone=344, Tablet=460}"
+                Command="{Binding LocateGymsCommand}" 
+                Grid.Row="1"
+                Margin="0,0,0,10"
+                AutomationProperties.Name="Locate Gyms button, clicking this will begin the locating gyms process.">
+                  <Button.Shadow>
+                        <Shadow Brush="Black" Offset="2,2" Radius="10" Opacity="0.8"/>
+                    </Button.Shadow>
+                </Button>
+
+
+            <!-- Map -->
+            <maps:Map x:Name="map" 
+                  IsVisible="{Binding IsMapVisible}" 
+                  HeightRequest="{OnIdiom Phone=344, Tablet=300}"
+                  WidthRequest="{OnIdiom Phone=344, Tablet=800}"
+                  Grid.Row="2" 
+                  HorizontalOptions="FillAndExpand" 
+                  VerticalOptions="FillAndExpand"
+                  IsShowingUser="{Binding IsUserLocationVisible}"
+                  AutomationProperties.Name="Map showing nearby gyms"/>
+
+
+            <!-- Gyms List View -->
+            <ListView x:Name="gymsListView" 
+                  ItemsSource="{Binding GymsCollection}" 
+                  Grid.Row="3"
+                  ItemSelected="OnGymsSelected"
+                      AutomationProperties.Name="List of gyms found near you!">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid ColumnDefinitions="*, Auto">
+
+                                <Label Text="{Binding Name}" 
+                                   Grid.Column="0" 
+                                   LineBreakMode="TailTruncation" 
+                                   FontFamily="BricolageGrotesqueSemiBold"/>
+                                <Label Text="{Binding DistanceFromUser, StringFormat='{0:0.00} km'}" 
+                                   Grid.Column="1" 
+                                   HorizontalOptions="End" 
+                                   Margin="10,0,0,0"  
+                                   FontFamily="DMSans"
+                                   AutomationProperties.Name="{Binding Name, StringFormat='{0} is {1:0.00} km away', ConverterParameter=DistanceFromUser}"/>
+
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </ContentView>
+</ContentPage>

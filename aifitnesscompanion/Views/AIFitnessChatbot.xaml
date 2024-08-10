@@ -1,0 +1,127 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:selectors="clr-namespace:aifitnesscompanion.Selectors"
+             x:Class="aifitnesscompanion.Views.AIFitnessChatbot"
+             Title="AI Fitness Coach"
+                          AutomationProperties.Name="AI Fitness Coach Page">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="UserMessageTemplate">
+                <!-- User Messages Frame Template -->
+                <Frame BackgroundColor="Green" Padding="10" CornerRadius="10" HorizontalOptions="End" HasShadow="True">
+                    <Label Text="{Binding Content}" TextColor="Black" FontSize="{OnIdiom Phone=14, Tablet=25 }" AutomationProperties.Name="{Binding Content}"/>
+
+                </Frame>
+            </DataTemplate>
+            <DataTemplate x:Key="AIMessageTemplate">
+                <!-- AI Messages Frame Template -->
+                <Frame BackgroundColor="LightGray" Padding="10" CornerRadius="10" HorizontalOptions="Start" HasShadow="True">
+                    <Label Text="{Binding Content}" TextColor="Black" FontSize="{OnIdiom Phone=14, Tablet=25 }" AutomationProperties.Name="{Binding Content}"/>
+                </Frame>
+            </DataTemplate>
+            <selectors:MessageTemplateSelector x:Key="MessageSelector"
+                                               UserMessageTemplate="{StaticResource UserMessageTemplate}"
+                                               AIMessageTemplate="{StaticResource AIMessageTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+   
+    <Grid >
+        <Grid.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Left" Command="{Binding SwipeCommand}" CommandParameter="Left" AutomationProperties.Name="Swipe left to go to the AI Calorie Calculator page."/>
+            <SwipeGestureRecognizer Direction="Right" Command="{Binding SwipeCommand}" CommandParameter="Right"  AutomationProperties.Name="Swipe right to go to the AI Fitness Coach page."/>
+        </Grid.GestureRecognizers>
+        <!-- Main Content -->
+        <Grid RowDefinitions="Auto, *, Auto">
+            
+
+            <!-- Messaging area -->
+            <CollectionView x:Name="MessagesList" ItemsUpdatingScrollMode="KeepLastItemInView" Grid.Row="1" Margin="5" ItemsSource="{Binding UIMessages}" Opacity="{Binding LayoutOpacity}" TranslationX="{Binding TranslationX}" AutomationProperties.Name="Conversation History">
+
+              
+                <CollectionView.Header>
+                    <!-- Initial chat welcome message -->
+                    <Frame CornerRadius="10" Padding="10" Margin="10" BackgroundColor="White" HorizontalOptions="Start"  HasShadow="True">
+                        <Label Text="Welcome to the AI Fitness Coach, I am here to guide you through your fitness journey. Send any fitness related questions into the chat for expert advice!"  MaximumWidthRequest="250" FontFamily="MaisonNeueExtendedExtraBold" TextColor="Black" AutomationProperties.Name="Welcome to the AI Fitness Coach, I am here to guide you through your fitness journey. Send any fitness related questions into the chat for expert advice!" FontSize="{OnIdiom Phone=14, Tablet=20 }"/>
+
+                    </Frame>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="8" CornerRadius="10" HasShadow="True"
+                   BackgroundColor="White" HorizontalOptions="Start" MaximumWidthRequest="250">
+                            <Frame.Triggers>
+                                <DataTrigger TargetType="Frame" Binding="{Binding Role}" Value="User">
+                                    <Setter Property="BackgroundColor" Value="Green"/>
+                                    <Setter Property="HorizontalOptions" Value="End"/>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Frame" Binding="{Binding Role}" Value="AI">
+                                    <Setter Property="BackgroundColor" Value="White"/>
+                                    <Setter Property="HorizontalOptions" Value="Start"/>
+                                </DataTrigger>
+                            </Frame.Triggers>
+                            <Label Text="{Binding Content}" FontFamily="MaisonNeueExtendedExtraBold" FontSize="{OnIdiom Phone=14, Tablet=25 }" TextColor="Black">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding Role}" Value="User">
+                                        <Setter Property="TextColor" Value="White"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" Binding="{Binding Role}" Value="AI">
+                                        <Setter Property="TextColor" Value="Black"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <Grid BackgroundColor="Transparent" Padding="10">
+                        <Label x:Name="TypingIndicator" Text="AI Coach Is Typing..." FontSize="{OnIdiom Phone=14, Tablet=20 }" FontFamily="MaisonNeueExtendedExtraBold" HorizontalOptions="Center" VerticalOptions="End" IsVisible="{Binding IsAICoachTyping}" AutomationProperties.Name="AI Coach is typing..."/>
+                    </Grid>
+                </CollectionView.Footer>
+            </CollectionView>
+
+
+            <!-- Input area with Send and Microphone buttons -->
+            <Grid x:Name="InputArea" Grid.Row="2" Padding="10" BackgroundColor="#FFFFFF">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Entry x:Name="MessageEntry" Placeholder="Type a message..." FontFamily="DMSans" Text="{Binding MessageEntryText}"  IsTextPredictionEnabled="True" IsEnabled="{Binding ChatEntryStatus}" Grid.Column="0" VerticalOptions="Center" AutomationProperties.Name="Message Entry: Enter your message here"/>
+
+                <Button x:Name="SendMessageButton" Grid.Column="1" VerticalOptions="Center"
+                        Command="{Binding SendMessageCommand}" Text="Send" Margin="0,0,10,0" Style="{StaticResource MainActionButtons}" IsEnabled="{Binding SendButtonStatus}" AutomationProperties.Name="Send message button, click this button to send your message to the AI Fitness Chatbot">
+                    <Button.FontSize>
+                        <OnIdiom x:TypeArguments="x:Double" Phone="16" Tablet="25"/>
+                    </Button.FontSize>
+                     <Button.Shadow>
+                        <Shadow Brush="Black" Offset="0.5,0.5" Radius="10" Opacity="0.8"/>
+                    </Button.Shadow>
+                </Button>
+
+                <Button x:Name="VoiceButton" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"
+                        Command="{Binding SendVoiceMessageCommand}" ImageSource="microphone.png" IsEnabled="{Binding MicrophoneButtonStatus}"  AutomationProperties.Name="Send voice message button, this will listen to what you say and put the transcription text into the message entry.">
+                    <Button.WidthRequest>
+                        <OnIdiom x:TypeArguments="x:Double" Phone="50" Tablet="70"/>
+                    </Button.WidthRequest>
+                    <Button.HeightRequest>
+                        <OnIdiom x:TypeArguments="x:Double" Phone="50" Tablet="65"/>
+                    </Button.HeightRequest>
+                  <Button.Shadow>
+                        <Shadow Brush="Black" Offset="0.5,0.5" Radius="10" Opacity="0.8"/>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <!-- Listening Overlay -->
+        <Grid IsVisible="{Binding IsListening}" BackgroundColor="#80000000">
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="20"
+                   HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="Listening..." HorizontalOptions="Center" FontFamily="DMSans" VerticalOptions="Center" AutomationProperties.Name="Listening to what you're saying" />
+            </Frame>
+        </Grid>
+    </Grid>
+
+</ContentPage>

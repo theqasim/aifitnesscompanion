@@ -1,0 +1,91 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="aifitnesscompanion.Views.CalorieCalculator"
+             Title="AI Calorie Calculator"
+             AutomationProperties.Name="Calorie Calculator Page">
+    <ContentView>
+        <ContentView.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Right" Command="{Binding SwipeCommand}" CommandParameter="Right"  AutomationProperties.Name="Swipe right to go to the Gym Locator Page."/>
+        </ContentView.GestureRecognizers>
+        <Grid TranslationX="{Binding TranslationX}" Opacity="{Binding LayoutOpacity}">
+            <Grid.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Right" Command="{Binding SwipeCommand}" CommandParameter="Right" AutomationProperties.Name="Swipe right to go to the Gym Locator Page."/>
+            </Grid.GestureRecognizers>
+
+            <Grid.RowDefinitions >
+                <RowDefinition Height="Auto" />
+                <!-- Title area -->
+                <RowDefinition Height="*" />
+                <!-- Content area -->
+            </Grid.RowDefinitions>
+
+            <!-- Semi-transparent overlay -->
+            <BoxView x:Name="OverlayBackground" 
+                 Color="Gray" 
+                 Opacity="0.4" 
+                 IsVisible="{Binding IsOverlayVisible}" 
+                 Grid.Row="0"
+                 Grid.RowSpan="2"
+                 />
+
+            <!-- Title and Subtitle -->
+            <VerticalStackLayout Grid.Row="0" 
+                             HorizontalOptions="Center" 
+                             VerticalOptions="Center">
+                <Label Text="Take a photo of the name of your menu item using the button below for an instant and accurate calorie esitmation!" 
+                   FontSize="{OnIdiom Phone=18, Tablet=22}" 
+                   HorizontalOptions="Center" 
+                   HorizontalTextAlignment="Center" 
+                    WidthRequest="{OnIdiom Phone=344, Tablet=560}"
+                   Margin="0,20,0,0"
+                   FontFamily="DMSans"
+                   AutomationProperties.Name="Take a photo of the name of your menu item using the button below for an instant and accurate calorie esitmation!"/>
+            </VerticalStackLayout>
+
+            <!-- Content Area -->
+            <VerticalStackLayout Spacing="25" 
+                             Padding="30" 
+                             Grid.Row="1">
+                <!-- Capture Image Button -->
+                <Button Text="{Binding CaptureImageButtonText}" 
+        Command="{Binding CaptureImageCommand}" 
+        Style="{StaticResource MainActionButtons}"
+        IsEnabled="{Binding CaptureImageStatus}"
+        WidthRequest="{OnIdiom Phone=344, Tablet=460}"
+        AutomationProperties.Name="Capture image of the name of your menu item using this button for an instant and accurate calorie estimation!">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" Offset="4,4" Radius="10" Opacity="0.8"/>
+                    </Button.Shadow>
+                </Button>
+
+
+                <!-- AI Response Text Label placed below the button -->
+                <Label Text="{Binding AiResponseText}" 
+                   FontFamily="DMSans"
+                   FontSize="18"
+                   HorizontalOptions="Center" 
+                   HorizontalTextAlignment="Center" 
+                   Margin="20,10"
+                   AutomationProperties.Name="{Binding AiResponseText, StringFormat='AI response: {0}'}"/>
+
+
+            </VerticalStackLayout>
+
+            <!-- Listening Overlay -->
+            <Label x:Name="Calculating" 
+               Text="Calculating Calories..." 
+               IsVisible="{Binding IsCalculatingVisible}" 
+               Grid.Row="0" 
+               Grid.RowSpan="2" 
+               FontAttributes="Bold" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Center" 
+               BackgroundColor="#757575" 
+               Opacity="0.95" 
+               TextColor="White" 
+               Padding="10" 
+               FontSize="20"
+               AutomationProperties.Name="Calculating calories overlay, plese await for the calculators response."/>
+        </Grid>
+    </ContentView>
+</ContentPage>

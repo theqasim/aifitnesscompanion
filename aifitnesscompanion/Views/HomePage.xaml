@@ -1,0 +1,76 @@
+﻿<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="aifitnesscompanion.Views.MainPage"
+             Title="Home"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ImageStyleForDevice" TargetType="Image">
+                <Setter Property="Margin">
+                    <Setter.Value>
+                        <OnIdiom x:TypeArguments="Thickness" Phone="10,10,10,10" Tablet="0,80,0,0"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <ScrollView.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Left" Command="{Binding SwipeCommand}" CommandParameter="Left"/>
+        </ScrollView.GestureRecognizers>
+        <VerticalStackLayout Spacing="25"
+                             TranslationX="{Binding TranslationX}" Padding="30" Scale="{OnIdiom Phone=1, Tablet=1.5}" HorizontalOptions="Fill" VerticalOptions="Start"  Opacity="{Binding LayoutOpacity}">
+            <!-- App Logo -->
+            <Image Source="app_logo.png"
+                   WidthRequest="120"
+                   HeightRequest="120"
+                   Style="{StaticResource ImageStyleForDevice}"
+                   HorizontalOptions="Center"
+                   AutomationProperties.Name="AI Fitness Companion logo" >
+                <Image.Shadow>
+        <Shadow Brush="Black"
+                Offset="2,2"
+                Opacity="0.8"
+                Radius="10" />
+    </Image.Shadow>
+                </Image>
+            <!-- App Name -->
+            <Label Text="AI Fitness Companion"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#333333"
+                   FontFamily="MaisonNeueExtendedExtraBold"
+                   AutomationProperties.Name="App Name: AI Fitness Companion"/>
+            <!-- Short Introduction about the app -->
+            <Label Text="Welcome to AI Fitness Companion – your all-in-one fitness and nutrition guide. Powered by AI technology, this app offers expert fitness coaching, easy gym location, and calorie calculations for a seamless fitness journey. Your fitness journey has never been simpler!"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="#333333"
+                   HorizontalTextAlignment="Center"
+                   WidthRequest="{OnIdiom Phone=344, Tablet=460}"
+                   FontFamily="MaisonNeueExtendedExtraBold"
+                   AutomationProperties.Name="Introduction text about AI Fitness Companion, detailing the features it has which is an AI Fitness Coach, a gym locator and a AI calorie counter. " />
+            <Frame CornerRadius="20"
+                   Padding="0"
+                   HasShadow="True"
+                   BackgroundColor="#007AFF"  
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Margin="0,0,0,10"
+                AutomationProperties.Name="Button frame with shadow">
+                <Button Text="Watch The YouTube Tutorial Here"
+            BackgroundColor="#007AFF"
+            TextColor="White"
+            CornerRadius="20"
+            HeightRequest="{OnIdiom Phone=44, Tablet=40}"
+            WidthRequest="{OnIdiom Phone=344, Tablet=260}"
+            FontAttributes="Bold"
+            FontFamily="MaisonNeueExtendedExtraBold"
+            Command="{Binding OpenYouTubeCommand}"
+            AutomationProperties.Name="Watch the YouTube tutorial here for the application." />
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

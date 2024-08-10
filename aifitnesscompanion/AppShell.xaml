@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:aifitnesscompanion.Views"
+       x:Class="aifitnesscompanion.AppShell"
+       Shell.FlyoutBehavior="Flyout"
+       Shell.TabBarBackgroundColor="{StaticResource TabBarBackgroundColor}"
+       Shell.TabBarUnselectedColor="{StaticResource TabBarUnselectedColor}"
+       Shell.TabBarTitleColor="{StaticResource TabBarTitleColor}"
+       FlyoutBackdrop="{StaticResource FlyoutBackdropColor}">
+
+
+
+    <FlyoutItem Title="Dashboard" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate views:MainPage}"
+        Route="MainPage"
+        Icon="home_icon.svg"
+        />
+
+        <ShellContent
+        Title="AI Fitness Coach"
+        ContentTemplate="{DataTemplate views:AIFitnessChatbot}"
+        Route="AIFitnessCoach"
+        Icon="aichatboticon.svg"
+
+        />
+
+
+        <ShellContent
+        Title="Gym Locator"
+        ContentTemplate="{DataTemplate views:GymLocator}"
+        Route="GymLocator"
+        Icon="gyms_icon.svg"
+        />
+
+
+        <ShellContent
+        Title="AI Calories"
+        ContentTemplate="{DataTemplate views:CalorieCalculator}"
+        Route="CalorieCalculator"
+        Icon="aicalories.svg"
+                            
+        />
+
+
+    </FlyoutItem>
+
+
+</Shell>
+
